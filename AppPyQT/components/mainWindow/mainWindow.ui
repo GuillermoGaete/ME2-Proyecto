@@ -10,6 +10,12 @@
     <height>461</height>
    </rect>
   </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
+  </property>
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
@@ -20,7 +26,7 @@
       <x>10</x>
       <y>10</y>
       <width>771</width>
-      <height>221</height>
+      <height>181</height>
      </rect>
     </property>
     <property name="title">
@@ -28,7 +34,7 @@
     </property>
    </widget>
   </widget>
-  <widget class="QMenuBar" name="menubar">
+  <widget class="QMenuBar" name="menuPrincipal">
    <property name="geometry">
     <rect>
      <x>0</x>
@@ -37,18 +43,69 @@
      <height>22</height>
     </rect>
    </property>
-   <widget class="QMenu" name="menuDispositivos">
+   <widget class="QMenu" name="menuArchivo">
     <property name="title">
      <string>Archivo</string>
     </property>
     <addaction name="actionGuardar"/>
    </widget>
+   <widget class="QMenu" name="menuDispositivos">
+    <property name="title">
+     <string>Dispositivos</string>
+    </property>
+    <widget class="QMenu" name="menuArduino">
+     <property name="title">
+      <string>Arduino</string>
+     </property>
+     <widget class="QMenu" name="menuPuerto_2">
+      <property name="title">
+       <string>Puerto</string>
+      </property>
+      <addaction name="actionSeleccionarPuerto"/>
+      <addaction name="separator"/>
+     </widget>
+     <addaction name="actionConectar"/>
+     <addaction name="actionDesconectar"/>
+     <addaction name="menuPuerto_2"/>
+    </widget>
+    <addaction name="separator"/>
+    <addaction name="menuArduino"/>
+   </widget>
+   <addaction name="menuArchivo"/>
    <addaction name="menuDispositivos"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
   <action name="actionGuardar">
    <property name="text">
     <string>Guardar</string>
+   </property>
+  </action>
+  <action name="actionConectar">
+   <property name="text">
+    <string>Conectar</string>
+   </property>
+  </action>
+  <action name="actionj_2">
+   <property name="text">
+    <string>j</string>
+   </property>
+  </action>
+  <action name="actionCOM_1">
+   <property name="text">
+    <string>COM 1</string>
+   </property>
+  </action>
+  <action name="actionDesconectar">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="text">
+    <string>Desconectar</string>
+   </property>
+  </action>
+  <action name="actionSeleccionarPuerto">
+   <property name="text">
+    <string>Seleccionar Puerto</string>
    </property>
   </action>
  </widget>
