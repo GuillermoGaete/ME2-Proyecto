@@ -34,6 +34,7 @@ void setup()
       digitalWrite(led, !digitalRead(led)); 
       delay(200);         
     }
+    Serial.println("ack");
     
     digitalWrite(led, LOW);
     
@@ -60,6 +61,8 @@ void loop()
   if ( Serial.available() > 0 ) 
   {
     input=Serial.read();
+
+    Serial.println("ack");
     
     if (input=='r')
     {
