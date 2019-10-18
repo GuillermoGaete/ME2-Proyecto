@@ -1,0 +1,72 @@
+@charset "utf-8";
+/* CSS Document */
+
+h3 span, footer a:hover, footer a:hover i { color:#CD661D; }
+/* Text Color */
+a, .post-details h3 a:hover, a.read-more, .read-more .icon-angle-right, .author-desc h5 a:hover, .tabs-framed li a:hover, .tabs-framed li a:hover i, .side-content .news-entry a:hover, .widget_tag_cloud a:hover, .pagination a:hover, .breadcrumb a:hover, .tagcloud li a:hover, .comment-meta .commentmetadata a:hover, .comment .comment-meta .author-name a:hover, .post-details h2 a:hover, .post-details ul li a:hover, #secondary .widget_recent_posts h5 a:hover, .widget_categories ul li a:hover, .widget_testimonials ul li p a:hover, .portfolio-container h4 a:hover, .toggle-accordion a:hover, .toggle a:hover, .toggle.active, .toggle.active a, .toggle-accordion.active, .toggle-accordion.active a, footer ul.footer-links li a:hover, ul.theme-color li [class^="icon-"], .iconbox-service:hover .animate, a.comment-reply-link:hover, .tabs-framed li a.current, .tabs-framed li a.current [class^="icon-"], .button.button-arrow .icon-angle-right, #secondary .tagcloud a:hover, #secondary h5 a:hover, #secondary ul li a:hover, .intro-text.type3 .button:hover, .recent-portfolio-widget ul li h5 a:hover, .recent-posts-widget ul li h5 a:hover, .woocommerce .star-rating, .woocommerce-page .star-rating { color:#CD661D; }
+
+/* background colors */
+#page-nav ul li.current-page-ancestor, #page-nav ul li.current_page_item, #page-nav ul li:hover, #page-nav ul li ul.sub-menu li:hover, .tag li a:hover, .portfolio-container li:hover h4.title a, .related-works.three-fourth li:hover h4 a, .portfolio-container li a:hover .thick-border, input[type="button"], input[type="submit"], input[type="reset"], button, .button, .color, .sorting-container li a.active, .sorting-container li a:hover, .sorting-container li a.active, .sorting-container li a:hover, .side-nav li a:hover, .side-nav li.current-page-item a, .sorting-container li a.active, .sorting-container li a:hover, .faq h5.toggle-accordion.active:before, .toggle-frame h5.toggle-accordion.active, .toggle-frame h5.toggle.active, .ls-layer .button-text2 a, .ls-layer .button-text a, .ls-layer h4, .ui-widget-content, .portfolio-thumb .image-overlay a span, ul.tabs-frame li a.current, ul.tabs-vertical-frame li a.current, .portfolio-slider-container .bx-controls-direction a, .carousel-arrows .icon-chevron-left:hover, .carousel-arrows .icon-chevron-right:hover, .theme-border, span.highlight, .intro-text.type3, .portfolio-container li:hover .portfolio-thumb .thick-border, .related-works li:hover .portfolio-thumb .thick-border, #page-nav ul li.current-page-ancestor li.current-menu-item, #page-nav ul li.current-page-ancestor li.current-menu-ancestor, #page-nav ul li.current-menu-ancestor li.current-menu-item, .theme-icon-box, ul.products li.product:hover a img, .widget.woocommerce ul.product_list_widget span.amount, ul.tabs li.active a, .featured-tag { background-color:#CD661D; }
+
+/* product img */
+ul.products li.product:hover a img { box-shadow:0 5px 0 #b75b1a; border-color: #b75b1a; }
+.woocommerce ul.products li.featured:before { background:url(images/featured-product.png) no-repeat; }
+
+.sorting-container li:hover a:before, .sorting-container li a.active:before { background:#CD661D; }
+
+/* pricing Table */
+.theme-color .tb-header { background-color:#de7f3c; }
+.pricing-table .theme-color .tb-content .price strong, .pricing-table .theme-color .tb-content .price strong sup { color:#CD661D; }
+
+/* border colors */
+header { border-top-color:#CD661D; }
+.portfolio-container li:hover .thick-border, .related-works li:hover .thick-border, .widget_flickr .flickr_badge_image:hover, .portfolio-container li .portfolio-thumb:hover .thick-border, #page-nav ul li ul.sub-menu li:hover, .container .intro div img, .pr-tb-col.selected, .theme-color .tb-content, .intro-text.type4, ul.tabs-vertical-frame li a.current, .widget .thumb > img:hover, .portfolio-container li.portfolio.one-column:hover .portfolio-thumb:hover .thick-border, .widget.woocommerce img.attachment-shop_thumbnail:hover, #primary .recent-portfolio-widget ul li a.thumb img:hover, .recent-posts-widget ul li a.thumb img:hover { border-color:#CD661D; }
+
+/* BUTTON STYLE */
+.button, p.form-submit input[type="submit"], #searchform input[type="submit"], .wpcf7-form-control.wpcf7-submit {
+	background-color:#cd661d;
+	background-image: linear-gradient(bottom, #cd661d 0%, #da8c56 100%);
+	background-image: -o-linear-gradient(bottom, #cd661d 0%, #da8c56 100%);
+	background-image: -moz-linear-gradient(bottom, #cd661d 0%, #da8c56 100%);
+	background-image: -webkit-linear-gradient(bottom, #cd661d 0%, #da8c56 100%);
+	background-image: -ms-linear-gradient(bottom, #cd661d 0%, #da8c56 100%);
+	background-image: -webkit-gradient(
+	linear,
+	left bottom,
+	left top,
+	color-stop(0, #cd661d)),
+	color-stop(1, #e28325))
+	); box-shadow: 0 5px 0 #ac5010; }
+.button:hover, p.form-submit input[type="submit"]:hover, #searchform input[type="submit"]:hover, .wpcf7-form-control.wpcf7-submit:hover {
+	background-color:#da8c56;
+	background-image: linear-gradient(bottom, #da8c56 0%, #cd661d 100%);
+	background-image: -o-linear-gradient(bottom, #da8c56 0%, #cd661d 100%);
+	background-image: -moz-linear-gradient(bottom, #da8c56 0%, #cd661d 100%);
+	background-image: -webkit-linear-gradient(bottom, #da8c56 0%, #cd661d 100%);
+	background-image: -ms-linear-gradient(bottom, #da8c56 0%, #cd661d 100%);
+	background-image: -webkit-gradient(
+	linear,
+	left bottom,
+	left top,
+	color-stop(0, #da8c56)),
+	color-stop(1, #cd661d))
+	); box-shadow: 0 5px 0 #ac5010; }
+.button:active { box-shadow:0 2px 0px #ac5010; -moz-box-shadow:0 2px 0px #ac5010; -webkit-box-shadow:0 2px 0px #ac5010; -o-box-shadow:0 2px 0px #ac5010; }
+.button .icon-angle-right { background-color: #59722b; box-shadow:1px 1px 0px #c36f35; color:#acda5a; }
+.button-arrow.button-arrow:before { background: #fbc7a3; border-right-color: #E28325; }
+.button.button-arrow .icon-angle-right { background-color: #F3F3F3; box-shadow: 1px 1px 0 #ac5010; }
+
+.pagination ul li a:hover, .pagination ul li.active-page, .pagination a .skip-page:hover, .woocommerce-pagination ul.page-numbers li span.current, .woocommerce-pagination ul.page-numbers li a:hover { border-color:#b85611; }
+
+.sorting-container li a.active, .sorting-container li a:hover { border-bottom-color:#b85611!important; border-top-color:#CD661D !important; text-shadow:1px 1px 0px #b77729; color:#ffffff; }
+.sorting-container li:first-child a.active { background:#CD661D !important; }
+
+/*ACCORDION*/
+.button, .button:hover, .button.large.button-arrow, ul.tabs-frame li a.current, ul.tabs-vertical-frame li a.current, .toggle-frame h5.toggle-accordion.active a, .toggle-frame h5.toggle.active a, .toggle-frame h5.toggle-accordion.active:before, .toggle-frame h5.toggle.active:before, .toggle-frame h5.toggle-accordion.active:hover, .toggle-frame h5.toggle.active:hover, .toggle-frame h5.toggle-accordion.active a, .toggle-frame h5.toggle.active a, .toggle-frame h5.toggle-accordion.active a:hover, .portfolio-container li h4.title a:hover, .related-works.three-fourth li h4.title a:hover, .portfolio-container li:hover h4.title a, .related-works.three-fourth li:hover h4.title a, .theme-color .tb-title h5, .theme-color .tb-title h6, p.form-submit input[type="submit"], p.form-submit input[type="submit"]:hover, .widget.woocommerce ul.product_list_widget span.amount, #searchform input[type="submit"], #searchform input[type="submit"]:hover, ul.tabs li.active a, .wpcf7-form-control.wpcf7-submit { color: #ffffff; text-shadow: 1px 1px 0 #b1520f; }
+ul.tabs-frame li a.current, .tabs-vertical-frame-content, .tabs-frame-content, .toggle-frame .toggle-content, ul.tabs-vertical-frame li a.current, .woocommerce-tabs .entry-content { border: 1px solid #b85611; }
+.toggle-frame .toggle-accordion.active:after, .tabs-frame-content:before { border-left: 1px solid #b85611; border-right: 1px solid #b85611; }
+ul.tabs-vertical-frame li.current a span { background:url(images/vertical-tabs-active.png) no-repeat scroll 0 0 transparent; }
+
+/* portfolio */
+.portfolio-slider-container .bx-controls a.bx-next { background-image: url(images/arrow-next.png); }
+.portfolio-slider-container .bx-controls a.bx-prev { background-image: url(images/arrow-prev.png); }
