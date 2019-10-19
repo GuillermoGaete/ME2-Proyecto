@@ -1,9 +1,10 @@
 import serial
 import serial.tools.list_ports as list_ports
 from PyQt5 import QtCore, QtGui, QtWidgets
+import threading
+
 
 from mainWindow_ui import *
-
 
 class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
     def __init__(self, *args, **kwargs):
@@ -15,16 +16,23 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.actionSeleccionarPuerto.setEnabled(False)
         self.addPorts()
         self.menuPuertos.triggered.connect(self.portChecked)
+        self.enviarComando.clicked.connect(self.sendCommand)
         self.conectarArduino.triggered.connect(self.tryConnectArduino)
         self.conectarArduino.setEnabled(False)
+
+    def sendCommand(self):
+        text=self.comando.text()
+        print("Enviando comando:"+text)
+
 
     def tryConnectArduino(self):
         print("Conectando a arduino")
         self.arduinoStatus = "connecting"
         self.serialArduino = serial.Serial(self.arduinoPort, 9600)
-        rawString = self.serialArduino.readline()
-        print(rawString.decode('ascci'))
-        self.serialArduino.close()
+        self.serialArduino.write(b'i')
+        readedLine=self.serialArduino.readline()
+        print(readedLine.decode().rstrip())
+        #Hay que cerrar la conexion
 
     def addPorts(self):
         portList=list_ports.comports()

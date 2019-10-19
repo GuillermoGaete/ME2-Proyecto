@@ -32,6 +32,29 @@
     <property name="title">
      <string>Estado dispositivos</string>
     </property>
+    <widget class="QPushButton" name="enviarComando">
+     <property name="geometry">
+      <rect>
+       <x>210</x>
+       <y>40</y>
+       <width>89</width>
+       <height>25</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Enviar</string>
+     </property>
+    </widget>
+    <widget class="QLineEdit" name="comando">
+     <property name="geometry">
+      <rect>
+       <x>320</x>
+       <y>40</y>
+       <width>113</width>
+       <height>25</height>
+      </rect>
+     </property>
+    </widget>
    </widget>
   </widget>
   <widget class="QMenuBar" name="menuPrincipal">
@@ -111,9 +134,7 @@
     <string>Seleccionar Puerto</string>
    </property>
    <property name="font">
-    <font>
-     <kerning>true</kerning>
-    </font>
+    <font/>
    </property>
   </action>
  </widget>
