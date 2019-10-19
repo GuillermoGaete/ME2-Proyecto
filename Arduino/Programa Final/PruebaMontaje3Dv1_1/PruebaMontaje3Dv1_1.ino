@@ -34,6 +34,7 @@ void setup()
       digitalWrite(led, !digitalRead(led)); 
       delay(200);         
     }
+    Serial.read();
     Serial.println("ack");
     
     digitalWrite(led, LOW);
