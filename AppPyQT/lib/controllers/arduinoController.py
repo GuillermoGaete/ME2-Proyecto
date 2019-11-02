@@ -1,46 +1,66 @@
-from PyQt5.QtCore import QThread
-from pyudev import Context, Monitor, MonitorObserver
-from qtpy.QtCore import Qt, QFileSystemWatcher, QSettings, Signal
+from PyQt5.QtCore import QThread, QThreadPool,QRunnable,pyqtSlot,pyqtSignal,Q_FLAG
+from PyQt5 import QtWidgets
+from qtpy.QtCore import Qt, QFileSystemWatcher, QSettings, Signal, QObject
 import serial
 import serial.tools.list_ports as list_ports
 from lib.utils.serialThread import serialThread
+import logging
+import time
 
-class arduinoController(QThread):
-    ''' Monitor udev for detection of usb '''
-    eventDectected = Signal(str)
+# Create a custom logger
+logger = logging.getLogger(__name__)
+logging.basicConfig(level=logging.DEBUG)
 
-    def __init__(self):
-        ''' Initiate the object '''
-        QThread.__init__(self)
-        self.loggerName = 'arduinoController'
-        self.connectionStatus='idle'
-        self.port=""
-        self.logger("Created..")
+c_handler = logging.StreamHandler()
+c_handler.setLevel(logging.DEBUG)
+c_format = logging.Formatter('[%(threadName)s][%(name)s] - %(levelname)s - %(message)s')
+c_handler.setFormatter(c_format)
+logger.addHandler(c_handler)
+logger.propagate = False
 
+class arduinoController(QObject):
+
+    connecting = pyqtSignal()
+    error = pyqtSignal(tuple)
+
+    result = pyqtSignal(object)
+
+    class statusConnection:
+        IDLE = 0x00
+        CONNECTING = 0x01
+        CONNECTED = 0x02
+        WAITING_ACK = 0x03
+        DISCONNECTING = 0x04
+        DISCONECTED = 0x05
+        ERROR = 0x06
+
+    Q_FLAG(statusConnection)
+
+    def __init__(self,threadPool):
+        super(arduinoController, self).__init__()
+        logger.debug("created")
+        self.threadPool=threadPool
+        self.status=self.statusConnection.IDLE
+        self.port=''
+        self.serialThread=serialThread()
+        self.threadPool.start(self.serialThread)
 
     def __del__(self):
-        self.wait()
+        logger.info("in __del__ method")
 
-    def onEventDetected(self,device):
-        self.logger('Event detected - DEVICE: {0} - ACTION: {0.action}'.format(device))
-        if device.action =="add":
-            self.eventDectected.emit("added")
-        if device.action =="remove":
-            self.eventDectected.emit("removed")
+    def isConnected(self):
+        if self.status==self.statusConnection.CONNECTED:
+            return True
+        else:
+            return False
 
-    def run(self):
-        #levantamos el detector de coneccion/desconeccion
-        self.context = Context()
-        self.monitor = Monitor.from_netlink(self.context)
-        self.monitor.filter_by(subsystem='tty')
-        self.observer = MonitorObserver(self.monitor, callback=self.onEventDetected, name='monitor-observer')
-        self.observer.daemon
-        self.observer.start()
-        #levantamos el thread que se comunica por serie
-        self.serial = serialThread()
-        self.serial.start()
+    @pyqtSlot()
+    def connectArduino(self):
+        logger.debug('CONNECTING')
+        self.status=self.statusConnection.CONNECTING
+        self.connecting.emit()
 
-
+'''
     def connect(self):
         if(self.port!=""):
             self.logger("Try to connect arduino")
@@ -54,15 +74,4 @@ class arduinoController(QThread):
                 self.status='connected'
                 #emitir una senial
                 self.logger('Connected')
-
-
-    def setPort(self,port):
-        self.port=port
-        self.logger('Port selected: {0}'.format(self.port))
-
-    def deletePort(self):
-        self.logger('Port deleted: {0}'.format(self.port))
-        self.setPort("")
-
-    def logger(self,message):
-        print('[{}] - {}'.format(self.loggerName,message))
+'''

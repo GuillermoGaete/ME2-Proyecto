@@ -1,23 +1,30 @@
-from PyQt5.QtCore import QThread
+from PyQt5.QtCore import QThread,QObject,pyqtSignal,QRunnable,pyqtSlot
 import logging
 
-class serialThread(QThread):
-    def __init__(self, portname="", baudrate=0):
-        QThread.__init__(self)
-        self.portname, self.baudrate = portname, baudrate
-        self.loggerName = "SerialThread"
-        self.logger("Created..")
-        logging.basicConfig(format='%(process)d-%(levelname)s-%(message)s')
-        logging.warning('This is a Warning')
+# Create a custom logger
+logger = logging.getLogger(__name__)
+logging.basicConfig(level=logging.DEBUG)
 
-    def setPort(self,port):
-        self.portname=port
+c_handler = logging.StreamHandler()
+c_handler.setLevel(logging.DEBUG)
+c_format = logging.Formatter('[%(threadName)s][%(name)s] - %(levelname)s - %(message)s')
+c_handler.setFormatter(c_format)
+logger.addHandler(c_handler)
+logger.propagate = False
 
-    def setBaudrate(self,baudrate):
-        self.baudrate=baudrate
+class serialThread(QRunnable):
 
+    finished = pyqtSignal()
+    error = pyqtSignal(tuple)
+    result = pyqtSignal(object)
+    progress = pyqtSignal(int)
+
+    def __init__(self, *args, **kwargs):
+        super(serialThread, self).__init__()
+        self.args = args
+        self.kwargs = kwargs
+        logger.debug('serialThread created')
+
+    @pyqtSlot()
     def run(self):
-        self.logger("Starting thread..")
-
-    def logger(self,message):
-        print('[{}] - {}'.format(self.loggerName,message))
+        logger.debug('serialThread started')

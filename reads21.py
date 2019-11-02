@@ -12,14 +12,18 @@ rm = visa.ResourceManager()
 
 print('******------ Lista de recursos -----*******')
 resources = rm.list_resources()
+
+print(resources)
 # resources es una tupla de los distintos "endpoints"
 for resource in resources:
-    myInstrument = rm.open_resource(resource)
-    idnResponse = myInstrument.query('*IDN?')
-    print ("Resourcer number: "+str(resources.index(resource)),"\n\t|-->VISA resource name: "+str(resource))
-    print("\t|-->Instrument: "+idnResponse)
-
-
+    result = resource.find('tty')
+    if result>0:
+        print("no valido")
+    else:
+        myInstrument=rm.open_resource(resource)
+        idnResponse = myInstrument.query('*IDN?')
+        print ("Resourcer number: "+str(resources.index(resource)),"\n\t|-->VISA resource name: "+str(resource))
+        print("\t|-->Instrument: "+idnResponse)
 
 
 def send_command(com):
@@ -46,7 +50,7 @@ send_command("CALC:MARK1 NORM")
 send_command("CALC:MARK1:X 2.15E9")
 
 
-NUM_PUNTOS=100
+NUM_PUNTOS=32
 
 db=[]
 
@@ -55,7 +59,13 @@ print("Listado de puertos:")
 for port in portList:
     print("Port added:"+port.device)
 
+input("Press Enter to continue...")
 
+serialArduino = serial.Serial('/dev/ttyACM1', 9600)
+readedLine=serialArduino.readline()
+print(readedLine.decode().rstrip())
+
+order="r"
 for x in range(0, NUM_PUNTOS):
     res=send_command("CALC:MARK1:Y?")
     print(res)
@@ -63,34 +73,27 @@ for x in range(0, NUM_PUNTOS):
     resultlist=res.split(',')
     print(resultlist)
     aux=resultlist[0].split('E+')
+    if(len(aux)<2):
+        aux=resultlist[0].split('E-')
+    print(len(aux))
     aux2=float(aux[0])*math.pow(10,float(aux[1]))
     directivity=int(round(10*aux2))
     print(directivity)
-
     db.append(directivity)
-
-#Asumo que ACA hay que mover el arduino
-    #Hay que reemplazar COM4 por el puerto
-    serialArduino = serial.Serial('COM4', 9600)
-    #Enviamos r para que se mueva a la derecha
-    serialArduino.write(b'r')
-    #Nos quedamos leyendo, si arduino no contesta nada aca se traba
-    readedLine=serialArduino.readline()
-
-    print(readedLine.decode().rstrip())
-    #cerramos la conexion serie
-    serialArduino.close()
-##Aca termina lo de Arduino
-
-    input("Press Enter to continue...")
+    responseSerial=""
+    serialArduino.write(order.encode())
+    while(responseSerial!="finish"):
+        readedLine=serialArduino.readline()
+        responseSerial = readedLine.decode().rstrip()
+        print(responseSerial)
 
 r = np.arange(0, 1, 1/NUM_PUNTOS)
 theta = 2*np.pi*r
 print(db)
 ax = plt.subplot(111, projection='polar')
 ax.plot(theta, db)
-ax.set_rmax(0)
-ax.set_rticks(np.arange(-600,0,100))  # Less radial ticks
+ax.set_rmax(-200)
+ax.set_rticks(np.arange(-500,-200,100))  # Less radial ticks
 ax.set_rlabel_position(90)  # Move radial labels away from plotted line
 ax.grid(True)
 
