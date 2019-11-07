@@ -7,12 +7,18 @@ import traceback
 import sys
 import serial
 import serial.tools.list_ports as list_ports
+from tempfile import TemporaryFile
 
-rm = visa.ResourceManager()
+rm = visa.ResourceManager('@py')
+
+#   Simulacion
+
+medidasim=[-30,-31,-32,-33,-34,-35,-36,-37,-38,-39,-40,-41,-42,-43,-44,-44,-44,-44,-43,-42,-41,-40,-39,-38,-37,-36,-35,-34,-33,-32,-31,-30]
+
+## Simulacion End
 
 print('******------ Lista de recursos -----*******')
 resources = rm.list_resources()
-
 print(resources)
 # resources es una tupla de los distintos "endpoints"
 for resource in resources:
@@ -24,7 +30,18 @@ for resource in resources:
         idnResponse = myInstrument.query('*IDN?')
         print ("Resourcer number: "+str(resources.index(resource)),"\n\t|-->VISA resource name: "+str(resource))
         print("\t|-->Instrument: "+idnResponse)
-
+#=======
+    #print(resources)
+    ## resources es una tupla de los distintos "endpoints"
+    #
+    #myInstrument = rm.open_resource(resources[0])
+    #idnResponse = myInstrument.query('*IDN?')
+    #print ("Resourcer number: "+str(resources.index(resources[0])),"\n\t|-->VISA resources[0] name: "+str(resources[0]))
+    #print("\t|-->Instrument: "+idnResponse)
+    #
+    #
+    #>>>>>>> Stashed changes
+##
 
 def send_command(com):
     command=""
@@ -37,14 +54,16 @@ def send_command(com):
     print('Comando ingresado:',command)
     print('Response:',response)
     return response
-
+print("            Inicializando VNA            ")
 send_command('INST "NA";*OPC?')
 send_command("CALC:PAR:COUN 1")
 send_command("CALC:PAR:DEF S21")
+print("Seteando medicion S21, con centro en 2.15E9")
 send_command("FREQ:CENT 2.15E9")
 send_command("FREQ:SPAN 1E9")
 #send_command("FREQ:STAR 1E9")
 #send_command("FREQ:STOP 3E9")
+print("Activando Marker")
 send_command("CALC:MARK1:ACTivate")
 send_command("CALC:MARK1 NORM")
 send_command("CALC:MARK1:X 2.15E9")
@@ -65,6 +84,17 @@ serialArduino = serial.Serial('/dev/ttyACM1', 9600)
 readedLine=serialArduino.readline()
 print(readedLine.decode().rstrip())
 
+
+print("     Lectura del valor patron    ")
+f=open("dbiset.txt","r")
+dbistr=f.readline()
+if len(dbistr) is 0:
+    print("No hay o no pudo leerse el valor patron con el que se va a medir")
+    exit()
+else:
+    dbi=int(dbistr)
+    print("El valor patron es de:", dbi)
+
 order="r"
 for x in range(0, NUM_PUNTOS):
     res=send_command("CALC:MARK1:Y?")
@@ -77,26 +107,59 @@ for x in range(0, NUM_PUNTOS):
         aux=resultlist[0].split('E-')
     print(len(aux))
     aux2=float(aux[0])*math.pow(10,float(aux[1]))
-    directivity=int(round(10*aux2))
-    print(directivity)
+    #directivity=int(round(10*aux2))
+    
+    print("Valor medido",aux2)
+    directivity=aux2-dbi
     db.append(directivity)
+    
     responseSerial=""
     serialArduino.write(order.encode())
     while(responseSerial!="finish"):
         readedLine=serialArduino.readline()
         responseSerial = readedLine.decode().rstrip()
         print(responseSerial)
+    #input("Press Enter to continue...")
 
-r = np.arange(0, 1, 1/NUM_PUNTOS)
+#Asumo que ACA hay que mover el arduino
+    #Hay que reemplazar COM4 por el puerto
+    #serialArduino = serial.Serial('/dev/ttyACM0', 9600)
+    #print(1)
+    #Enviamos r para que se mueva a la derecha
+    #serialArduino.write(b'r')
+    #Nos quedamos leyendo, si arduino no contesta nada aca se traba
+    #print(2)
+    
+    #readedLine=serialArduino.readline()
+    #print(readedLine.decode().rstrip())
+    #cerramos la conexion serie
+    #serialArduino.close()
+##Aca termina lo de Arduino
+
+
+
+print("\nSaving [db] data to s21_x.npy\n")
+outfile = TemporaryFile()
+np.save("s21_x.npy",db)
+_ = outfile.seek(0)
+print("Saved file:",np.load("s21_x.npy"))
+
+
+print("Generando grafico polar de las mediciones tomadas")
+r = np.arange(-0.75, 0.25, 1/NUM_PUNTOS)
 theta = 2*np.pi*r
 print(db)
+#db.append(db[0])
 ax = plt.subplot(111, projection='polar')
 ax.plot(theta, db)
-ax.set_rmax(-200)
-ax.set_rticks(np.arange(-500,-200,100))  # Less radial ticks
+
+print(np.floor((max(db)+10)/10))
+ax.set_rmax(np.floor((max(db)+10)/10)*10)
+ax.set_rticks(np.arange(np.floor(min(db)/10)*10,np.floor((max(db)+10)/10)*10,10))  # Less radial ticks
 ax.set_rlabel_position(90)  # Move radial labels away from plotted line
 ax.grid(True)
 
 ax.set_title("Radiation lobule of a patch antenna", va='bottom')
 plt.show()
+
 #send_command("CALC:MARK:BWID:DATA?")
