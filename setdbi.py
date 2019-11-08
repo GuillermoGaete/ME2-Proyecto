@@ -57,8 +57,11 @@ print(type(res))
 resultlist=res.split(',')
 print(resultlist)
 aux=resultlist[0].split('E+')
+if(len(aux)<2):
+    aux=resultlist[0].split('E-')
+print(aux)
 aux2=float(aux[0])*math.pow(10,float(aux[1]))
-directivity=int(round(10*aux2))
+directivity=aux2
 print(directivity)
 f=open("dbiset.txt","w+")
 dirstr=str(directivity)
