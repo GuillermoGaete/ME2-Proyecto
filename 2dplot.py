@@ -9,7 +9,8 @@ import sys
 import serial
 import serial.tools.list_ports as list_ports
 from tempfile import TemporaryFile
-
+import numpy as np
+import scipy.io
 
 NUM_PUNTOS=32
 
@@ -20,21 +21,34 @@ NUM_PUNTOS=32
 
 
 
-x_data=np.load("s21_x.npy")
-y_data=np.load("s21_y.npy")
+x5_data=np.load("s21_x5_mediogiro_cercano.npy")
+x7_data=np.load("s21_x7_mediogiro_cercano.npy")
+x8_data=np.load("s21_x8_mediogiro_cercano.npy")
+
+y1_data=np.load("s21_y1_mediogiro_cercano.npy")
+y2_data=np.load("s21_y2_mediogiro_cercano.npy")
+y3_data=np.load("s21_y3_mediogiro_cercano.npy")
+
+t=np.arange(0,NUM_PUNTOS,1)
+
+scipy.io.savemat('testX.mat', dict(x=t, y=x5_data))
+scipy.io.savemat('testY.mat', dict(x=t, y=y1_data))
 
 
 
 print("Generando grafico polar de las mediciones tomadas")
 r = np.arange(-0.75, 0.25, 1/NUM_PUNTOS)
-theta = 2*np.pi*r
+theta = 2*np.pi*r-(90/180)*np.pi
 #db.append(db[0])
 
 ax = plt.subplot(211, projection='polar')
-ax.plot(theta, x_data)
-print(np.floor((max(x_data)+10)/10))
-ax.set_rmax(np.floor((max(x_data)+10)/10)*10)
-ax.set_rticks(np.arange(np.floor(min(x_data)/10)*10,np.floor((max(x_data)+10)/10)*10,10))  # Less radial ticks
+ax.plot(theta, x5_data,'r')
+ax.plot(theta, x8_data,'g')
+ax.plot(theta, x7_data,'b')
+
+print(np.floor((max(x5_data)+10)/10))
+ax.set_rmax(np.floor((max(x5_data)+10)/10)*10)
+ax.set_rticks(np.arange(np.floor(min(x5_data)/10)*10,np.floor((max(x5_data)+10)/10)*10,10))  # Less radial ticks
 ax.set_rlabel_position(90)  # Move radial labels away from plotted line
 ax.grid(True)
 
@@ -42,10 +56,13 @@ ax.set_title("Lobulo eje X", va='bottom')
 
 
 ax = plt.subplot(212, projection='polar')
-ax.plot(theta, y_data)
-print(np.floor((max(y_data)+10)/10))
-ax.set_rmax(np.floor((max(y_data)+10)/10)*10)
-ax.set_rticks(np.arange(np.floor(min(y_data)/10)*10,np.floor((max(y_data)+10)/10)*10,10))  # Less radial ticks
+ax.plot(theta, y1_data,'r')
+ax.plot(theta, y2_data,'g')
+ax.plot(theta, y3_data,'b')
+
+print(np.floor((max(y1_data)+10)/10))
+ax.set_rmax(np.floor((max(y1_data)+10)/10)*10)
+ax.set_rticks(np.arange(np.floor(min(y1_data)/10)*10,np.floor((max(y1_data)+10)/10)*10,10))  # Less radial ticks
 ax.set_rlabel_position(90)  # Move radial labels away from plotted line
 ax.grid(True)
 

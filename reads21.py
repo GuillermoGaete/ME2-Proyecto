@@ -93,7 +93,7 @@ print("Configurando IFBW y promediado")
 time.sleep(.200)
 send_command("BWID 10E3")              #Funciono bien con 10k #100k
 time.sleep(.200)
-send_command("AVER:COUN 20")
+send_command("AVER:COUN 6")
 time.sleep(.200)
 send_command("SWE:POIN 400")
 time.sleep(.200)
@@ -111,7 +111,7 @@ for port in portList:
 
 #input("Press Enter to continue...")
 
-serialArduino = serial.Serial('/dev/ttyACM1', 9600)
+serialArduino = serial.Serial('/dev/ttyACM0', 9600)
 readedLine=serialArduino.readline()
 print(readedLine.decode().rstrip())
 
@@ -172,7 +172,7 @@ for x in range(0,NUM_MEDIOGIRO):
         readedLine=serialArduino.readline()
         responseSerial = readedLine.decode().rstrip()
         print(responseSerial)
-    
+   
 for x in range(0, NUM_MEDIOGIRO):
     time.sleep(delay)
     res=send_command("CALC:MARK1:Y?")
@@ -205,7 +205,7 @@ for x in range(0, NUM_MEDIOGIRO):
     #serialArduino = serial.Serial('/dev/ttyACM0', 9600)
     #print(1)
     #Enviamos r para que se mueva a la derecha
-    #serialArduino.write(b'r')
+   #serialArduino.write(b'r')
     #Nos quedamos leyendo, si arduino no contesta nada aca se traba
     #print(2)
     
@@ -217,11 +217,11 @@ for x in range(0, NUM_MEDIOGIRO):
 
 
 
-print("\nSaving [db] data to s21_y.npy\n")
+print("\nSaving [db] data to s21_y5_mediogiro_cercano.npy\n")
 outfile = TemporaryFile()
-np.save("s21_y.npy",db)
+np.save("s21_y5_mediogiro_cercano.npy",db)
 _ = outfile.seek(0)
-print("Saved file:",np.load("s21_y.npy"))
+print("Saved file:",np.load("s21_y5_mediogiro_cercano.npy"))
 
 
 print("Generando grafico polar de las mediciones tomadas")
@@ -235,7 +235,7 @@ ax.plot(theta, db)
 print(np.floor((max(db)+10)/10))
 ax.set_rmax(np.floor((max(db)+10)/10)*10)
 ax.set_rticks(np.arange(np.floor(min(db)/10)*10,np.floor((max(db)+10)/10)*10,10))  # Less radial ticks
-ax.set_rlabel_position(90)  # Move radial labels away from plotted line
+ax.set_rlabel_position(0)  # Move radial labels away from plotted line
 ax.grid(True)
 
 ax.set_title("Radiation lobule of a patch antenna", va='bottom')

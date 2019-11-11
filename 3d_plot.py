@@ -1,11 +1,14 @@
 
-from numpy import * 	# for outer and arange
-import pylab as p
-#%matplotlib inline
-import numpy as np
+from mpl_toolkits.mplot3d import Axes3D  # noqa: F401 unused import
+
 import matplotlib.pyplot as plt
-from mpl_toolkits import mplot3d
+from matplotlib import cm
+from matplotlib.ticker import LinearLocator, FormatStrFormatter
 import numpy as np
+
+
+
+
 NUM_PUNTOS=32
 NUM_HALF=16
 
@@ -25,7 +28,7 @@ def interpole(X,Y):
         zn=[]
         for j in range(0,NUM_PUNTOS):
             
-            zn.append((y[i]*(NUM_HALF-abs(NUM_HALF-j)))/2+(x[j]*(NUM_HALF-abs(NUM_HALF-i)))/2)
+            zn.append((y[i]*(NUM_HALF-abs(NUM_HALF-j))/NUM_HALF)/2+(x[j]*(NUM_HALF-abs(NUM_HALF-i))/NUM_HALF)/2)
             #print("zn",zn)
         z.append(zn)
     print("z",shape(z))
@@ -53,39 +56,26 @@ z=interpole(x_data,y_data)
 
 
 
-
-#fig = p.figure()	
-#ax = p3.Axes3D(fig)	
-#
-#theta = arange(0,pi,pi/32)	
-#phi = arange(0,2*pi,pi/32)	
-#r = 2 * pow(math.e, -((theta**4)/(0.25**2))) # need to distort the radius by some function
-#print("r",r)
-#print('r',shape(r))
-#x = z[16]*outer(cos(phi), sin(theta))	
-#y = z[16]*outer(sin(phi), sin(theta))
-#z = z[16]*outer(ones(phi.shape), cos(theta))	
-#
-#print (shape(x), shape(y), shape(z))
-#
-#ax.plot_wireframe(x,y,z)
-#ax.set_xlabel("X")
-#ax.set_ylabel("Y")
-#ax.set_zlabel("Z")
-#
-#p.show()
-#
-#
-
-x = np.arange(0, 32, 1)
-y = np.arange(0, 32, 1)
-X, Y = np.meshgrid(x, y)
 fig = plt.figure()
-ax = plt.axes(projection='3d')
-ax.plot_surface(X, Y, z, rstride=1, cstride=1,
-                cmap='winter', edgecolor='none')
-ax.set_title('surface')
-ax.set_xlabel('x')
-ax.set_ylabel('y')
-ax.set_zlabel('z')
+ax = fig.gca(projection='3d')
+
+# Make data.
+X = np.arange(-5, 5, 0.25)
+Y = np.arange(-5, 5, 0.25)
+X, Y = np.meshgrid(X, Y)
+R = np.sqrt(X**2 + Y**2)
+Z = np.sin(R)
+
+# Plot the surface.
+surf = ax.plot_surface(X, Y, Z, cmap=cm.coolwarm,
+                       linewidth=0, antialiased=False)
+
+# Customize the z axis.
+ax.set_zlim(-1.01, 1.01)
+ax.zaxis.set_major_locator(LinearLocator(10))
+ax.zaxis.set_major_formatter(FormatStrFormatter('%.02f'))
+
+# Add a color bar which maps values to colors.
+fig.colorbar(surf, shrink=0.5, aspect=5)
+
 plt.show()
