@@ -24,7 +24,7 @@ def interpole(X,Y):
     y=y_data[aux]
     #print(x)
     z=[]
-    for i in range (0,NUM_PUNTOS):
+    for i in range (0,NUM_PUNTOS/2):
         zn=[]
         for j in range(0,NUM_PUNTOS):
             
