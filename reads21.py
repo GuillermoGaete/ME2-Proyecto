@@ -103,7 +103,7 @@ time.sleep(.200)
 NUM_PUNTOS=int(32)
 NUM_MEDIOGIRO=int(NUM_PUNTOS/2)
 
-db=[]
+
 portList=list_ports.comports()
 print("Listado de puertos:")
 for port in portList:
@@ -126,102 +126,112 @@ else:
     dbi=float(dbistr)
     print("El valor patron es de:", dbi)
 
-order="r"
-reset_position()
-send_command("AVER:CLE")
-for x in range(0, NUM_MEDIOGIRO):
-    
-    time.sleep(delay)
-    res=send_command("CALC:MARK1:Y?")
+    order="r"
+
+def medicion(i):
+
+    db=[]
+    reset_position()
     send_command("AVER:CLE")
-    print(res)
-    print(type(res))
-    resultlist=res.split(',')
-    print(resultlist)
-    aux=resultlist[0].split('E+')
-    if(len(aux)<2):
-        aux=resultlist[0].split('E-')
-    print(len(aux))
-    aux2=float(aux[0])*math.pow(10,float(aux[1]))
-    #directivity=int(round(10*aux2))
-    
-    print("Valor medido",aux2)
-    directivity=aux2-dbi
-    db.append(directivity)
-    serialArduino.write(b'r')
-    responseSerial=""
-    #serialArduino.write(order.encode())
-    while(responseSerial!="finish"):
-        readedLine=serialArduino.readline()
-        responseSerial = readedLine.decode().rstrip()
-        print(responseSerial)
+    for x in range(0, NUM_MEDIOGIRO):
+        
+        time.sleep(delay)
+        res=send_command("CALC:MARK1:Y?")
+        send_command("AVER:CLE")
+        print(res)
+        print(type(res))
+        resultlist=res.split(',')
+        print(resultlist)
+        aux=resultlist[0].split('E+')
+        if(len(aux)<2):
+            aux=resultlist[0].split('E-')
+        print(len(aux))
+        aux2=float(aux[0])*math.pow(10,float(aux[1]))
+        #directivity=int(round(10*aux2))
+        
+        print("Valor medido",aux2)
+        directivity=aux2
+        db.append(directivity)
+        serialArduino.write(b'r')
+        responseSerial=""
+        #serialArduino.write(order.encode())
+        while(responseSerial!="finish"):
+            readedLine=serialArduino.readline()
+            responseSerial = readedLine.decode().rstrip()
+            print(responseSerial)
 
-serialArduino.write(b'z')
-responseSerial=""
-#serialArduino.write(order.encode())
-while(responseSerial!="finish"):
-    readedLine=serialArduino.readline()
-    responseSerial = readedLine.decode().rstrip()
-    print(responseSerial)
-time.sleep(delay)
-for x in range(0,NUM_MEDIOGIRO):
-    serialArduino.write(b'l')
+    serialArduino.write(b'z')
     responseSerial=""
     #serialArduino.write(order.encode())
     while(responseSerial!="finish"):
         readedLine=serialArduino.readline()
         responseSerial = readedLine.decode().rstrip()
         print(responseSerial)
-   
-for x in range(0, NUM_MEDIOGIRO):
     time.sleep(delay)
-    res=send_command("CALC:MARK1:Y?")
-    send_command("AVER:CLE")
-    print(res)
-    print(type(res))
-    resultlist=res.split(',')
-    print(resultlist)
-    aux=resultlist[0].split('E+')
-    if(len(aux)<2):
-        aux=resultlist[0].split('E-')
-    print(len(aux))
-    aux2=float(aux[0])*math.pow(10,float(aux[1]))
-    #directivity=int(round(10*aux2))
+    for x in range(0,NUM_MEDIOGIRO):
+        serialArduino.write(b'l')
+        responseSerial=""
+        #serialArduino.write(order.encode())
+        while(responseSerial!="finish"):
+            readedLine=serialArduino.readline()
+            responseSerial = readedLine.decode().rstrip()
+            print(responseSerial)
     
-    print("Valor medido",aux2)
-    directivity=aux2-dbi
-    db.append(directivity)
-    serialArduino.write(b'r')
-    responseSerial=""
-    #serialArduino.write(order.encode())
-    while(responseSerial!="finish"):
-        readedLine=serialArduino.readline()
-        responseSerial = readedLine.decode().rstrip()
-        print(responseSerial)
-    #input("Press Enter to continue...")
+    for x in range(0, NUM_MEDIOGIRO):
+        time.sleep(delay)
+        res=send_command("CALC:MARK1:Y?")
+        send_command("AVER:CLE")
+        print(res)
+        print(type(res))
+        resultlist=res.split(',')
+        print(resultlist)
+        aux=resultlist[0].split('E+')
+        if(len(aux)<2):
+            aux=resultlist[0].split('E-')
+        print(len(aux))
+        aux2=float(aux[0])*math.pow(10,float(aux[1]))
+        #directivity=int(round(10*aux2))
+        
+        print("Valor medido",aux2)
+        directivity=aux2
+        db.append(directivity)
+        serialArduino.write(b'r')
+        responseSerial=""
+        #serialArduino.write(ormpoder.encode())
+        while(responseSerial!="finish"):
+            readedLine=serialArduino.readline()
+            responseSerial = readedLine.decode().rstrip()
+            print(responseSerial)
+        #input("Press Enter to continue...")
 
-#Asumo que ACA hay que mover el arduino
-    #Hay que reemplazar COM4 por el puerto
-    #serialArduino = serial.Serial('/dev/ttyACM0', 9600)
-    #print(1)
-    #Enviamos r para que se mueva a la derecha
-   #serialArduino.write(b'r')
-    #Nos quedamos leyendo, si arduino no contesta nada aca se traba
-    #print(2)
-    
-    #readedLine=serialArduino.readline()
-    #print(readedLine.decode().rstrip())
-    #cerramos la conexion serie
-    #serialArduino.close()
-##Aca termina lo de Arduino
+    #Asumo que ACA hay que mover el arduino
+        #Hay que reemplazar COM4 por el puerto
+        #serialArduino = serial.Serial('/dev/ttyACM0', 9600)
+        #print(1)
+        #Enviamos r para que se mueva a la derecha
+    #serialArduino.write(b'r')
+        #Nos quedamos leyendo, si arduino no contesta nada aca se traba
+        #print(2)
+        
+        #readedLine=serialArduino.readline()
+        #print(readedLine.decode().rstrip())
+        #cerramos la conexion serie
+        #serialArduino.close()
+    ##Aca termina lo de Arduino
+    print("Medida terminada, valores:     ", db)
 
+    num=str(i)
+    num=num+".npy"
+    print("\nSaving [db] data to ./medidas/estrutcura1_32_X\n"+num)
+    outfile = TemporaryFile()
+    np.save("./medidas/estrutcura1_32_X"+num,db)
+    _ = outfile.seek(0)
+    print("Saved file:",np.load("./medidas/estrutcura1_32_X"+num))
+    db=np.subtract(db,dbi)
 
+for i in range(1,4):
+    medicion(i)
 
-print("\nSaving [db] data to s21_y5_mediogiro_cercano.npy\n")
-outfile = TemporaryFile()
-np.save("s21_y5_mediogiro_cercano.npy",db)
-_ = outfile.seek(0)
-print("Saved file:",np.load("s21_y5_mediogiro_cercano.npy"))
 
 
 print("Generando grafico polar de las mediciones tomadas")

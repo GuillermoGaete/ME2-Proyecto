@@ -1,13 +1,6 @@
 %% 
 clc;
 clear;
- d = dipole;
-[efield,az,el] = pattern(d, 75e6,'Type','efield');
-phi = az';
-theta = (90-el);
-MagE = efield';
-surf(MagE)
-
 %%
 load('testX.mat');
 %polx=circshift(y,16);
@@ -21,7 +14,7 @@ aux=circshift(polx,16);
 % else
 %     polx=polx+(max(poly)-max(polx))
 % end
-if poly(16)>aux(16)
+if poly(round(length(poly)/2))>aux(round(length(aux)/2))
     aux=aux+ploy(16)-aux(16);
 else
     poly=poly-poly(16)+aux(16);
@@ -48,7 +41,7 @@ ph=ph';
 %%
 for i = 1:1:181
     for j=1:1:361
-            R(j,i)=(R(181,i).*(1-abs(j-181)/181))/2+(R(j,91).*(1-abs(i-91)/91))/2;
+            R(j,i)=(R(181,i).*(1-abs(j-181)/180))/2+(R(j,91).*(1-abs(i-91)/90))/2;
     end
 end
 R(361,181)=R(181,181).*0.0312/2+R(361,91).*0.0625/2;
@@ -56,4 +49,4 @@ surf(R);
 th=180:-1:0;
 ph=-180:1:180;
 ph=ph';
-patternCustom(R,th,ph);
+%`patternCustom(R,th,ph);

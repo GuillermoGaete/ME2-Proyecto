@@ -82,7 +82,7 @@ def reset_position():
 
     responseSerial=""
 
-    serialArduino.write(order.encode())
+    
 
     while(responseSerial!="finish"):
 
@@ -210,8 +210,19 @@ else:
 
 order="r"
 
-reset_position()
+#reset_position()
 
+serialArduino.write(b'r')
+
+responseSerial=""
+
+    
+
+while(responseSerial!="finish"):
+    readedLine=serialArduino.readline()
+    responseSerial = readedLine.decode().rstrip()
+    print(responseSerial)
+exit()
 data=np.load("s21_x.npy")
 print("Datos simulados:",data)
 for x in range(0, NUM_MEDIOGIRO):
@@ -252,7 +263,7 @@ for x in range(0, NUM_MEDIOGIRO):
 
     responseSerial=""
 
-    serialArduino.write(order.encode())
+    
 
     while(responseSerial!="finish"):
 
@@ -266,7 +277,7 @@ serialArduino.write(b'z')
 
 responseSerial=""
 
-serialArduino.write(order.encode())
+
 
 while(responseSerial!="finish"):
 
@@ -282,7 +293,7 @@ for x in range(0,NUM_MEDIOGIRO):
 
     responseSerial=""
 
-    serialArduino.write(order.encode())
+    
 
     while(responseSerial!="finish"):
 
@@ -334,7 +345,7 @@ for x in range(0, NUM_MEDIOGIRO):
 
     responseSerial=""
 
-    serialArduino.write(order.encode())
+    
 
     while(responseSerial!="finish"):
 

@@ -16,18 +16,18 @@ NUM_PUNTOS=32
 
 
 
+#todos los valores estan normalizados para un patron seteado a mano
 
 
 
 
+x5_data=np.load("./medidas/estrutcura1_32_X1.npy")
+x7_data=np.load("./medidas/estrutcura1_32_X2.npy")
+x8_data=np.load("./medidas/estrutcura1_32_X3.npy")
 
-x5_data=np.load("s21_x5_mediogiro_cercano.npy")
-x7_data=np.load("s21_x7_mediogiro_cercano.npy")
-x8_data=np.load("s21_x8_mediogiro_cercano.npy")
-
-y1_data=np.load("s21_y1_mediogiro_cercano.npy")
-y2_data=np.load("s21_y2_mediogiro_cercano.npy")
-y3_data=np.load("s21_y3_mediogiro_cercano.npy")
+y1_data=np.load("./medidas/estrutcura1_32_X1.npy")
+y2_data=np.load("./medidas/estrutcura1_32_X2.npy")
+y3_data=np.load("./medidas/estrutcura1_32_X3.npy")
 
 t=np.arange(0,NUM_PUNTOS,1)
 
@@ -43,8 +43,8 @@ theta = 2*np.pi*r-(90/180)*np.pi
 
 ax = plt.subplot(211, projection='polar')
 ax.plot(theta, x5_data,'r')
-ax.plot(theta, x8_data,'g')
-ax.plot(theta, x7_data,'b')
+ax.plot(theta, x7_data,'g')
+ax.plot(theta, x8_data,'b')
 
 print(np.floor((max(x5_data)+10)/10))
 ax.set_rmax(np.floor((max(x5_data)+10)/10)*10)
