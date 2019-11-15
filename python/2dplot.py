@@ -29,10 +29,45 @@ y1_data=np.load("../medidas/estrutcura_viernes_128_Y1.npy") #Valor medido con 12
 y2_data=np.load("../medidas/estrutcura_viernes_128_Y2.npy") #Valor medido con 128
 y3_data=np.load("../medidas/estrutcura_viernes_32_Y3.npy")
 
+print(max(y1_data),max(x5_data))
+dif=abs(x5_data[0]-y1_data[0])
+
+if x5_data[0]<y1_data[0]:
+    x5_data=np.add(x5_data,dif)
+    x7_data=np.add(x7_data,dif)
+else:
+    y1_data=np.add(y1_data,dif)
+    y2_data=np.add(y2_data,dif)
+
+
+print("     Lectura del valor patron    ")
+f=open("dbiset.txt","r")
+dbistr=f.readline()
+if len(dbistr) is 0:
+    print("No hay o no pudo leerse el valor patron con el que se va a medir")
+    exit()
+else:
+    dbi=float(dbistr)
+    print("El valor patron es de:", dbi)
+
+patron=6.32-dbi
+
+
+x5_data=np.add(x5_data,patron)
+x7_data=np.add(x7_data,patron)
+x8_data=np.add(x8_data,patron)
+y1_data=np.add(y1_data,patron)
+y2_data=np.add(y2_data,patron)
+y3_data=np.add(y3_data,patron)
+
+
+
+print(max(x5_data))
+
 t=np.arange(0,NUM_PUNTOS,1)
 
-scipy.io.savemat('../MATLAB/estrutcura_viernes_128X.mat', dict(x=t, y=x5_data))
-scipy.io.savemat('../MATLAB/estrutcura_viernes_128Y.mat', dict(x=t, y=y1_data))
+scipy.io.savemat('../MATLAB/estrutcura_viernes_dbi128X.mat', dict(x=t, y=x5_data))
+scipy.io.savemat('../MATLAB/estrutcura_viernes_dbi128Y.mat', dict(x=t, y=y1_data))
 
 
 
@@ -52,10 +87,10 @@ ax.plot(theta2, x7_data,'g')
 print(np.floor((max(x5_data)+10)/10))
 ax.set_rmax(np.floor((max(x5_data)+10)/10)*10)
 ax.set_rticks(np.arange(np.floor(min(x5_data)/10)*10,np.floor((max(x5_data)+10)/10)*10,10))  # Less radial ticks
-ax.set_rlabel_position(90)  # Move radial labels away from plotted line
+ax.set_rlabel_position(0)  # Move radial labels away from plotted line
 ax.grid(True)
 
-ax.set_title("Lobulo eje X", va='bottom')
+ax.set_title("Lobulo eje X [dBi]", va='bottom')
 
 
 ax = plt.subplot(212, projection='polar')
@@ -68,8 +103,8 @@ ax.plot(theta2, y2_data,'g')
 print(np.floor((max(y1_data)+10)/10))
 ax.set_rmax(np.floor((max(y1_data)+10)/10)*10)
 ax.set_rticks(np.arange(np.floor(min(y1_data)/10)*10,np.floor((max(y1_data)+10)/10)*10,10))  # Less radial ticks
-ax.set_rlabel_position(90)  # Move radial labels away from plotted line
+ax.set_rlabel_position(0)  # Move radial labels away from plotted line
 ax.grid(True)
 
-ax.set_title("Lobulo eje Y", va='bottom')
+ax.set_title("Lobulo eje Y [dBi]", va='bottom')
 plt.show(block=True)
