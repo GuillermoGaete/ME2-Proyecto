@@ -44,7 +44,7 @@ for resource in resources:
     #>>>>>>> Stashed changes
 ##
 def reset_position():
-    serialArduino.write(b'z')
+    serialArduino.write(b'<Z1>')
     responseSerial=""
     #serialArduino.write(order.encode())
     while(responseSerial!="finish"):
@@ -100,9 +100,20 @@ time.sleep(.200)
 send_command("AVER:CLE")
 time.sleep(.200)
 
-NUM_PUNTOS=int(32)
+NUM_TOTALES=int(2048)
+NUM_PUNTOS=int(128)
 NUM_MEDIOGIRO=int(NUM_PUNTOS/2)
+PASO=NUM_TOTALES/NUM_PUNTOS
 
+PASO_R="<R"+str(int(PASO))+">"
+PASO_L="<L"+str(int(PASO))+">"
+PASO_180_R="<R"+str(int(NUM_TOTALES/2))+">"
+PASO_180_L="<L"+str(int(NUM_TOTALES/2))+">"
+PASO_360_R="<R"+str(int(NUM_TOTALES))+">"
+PASO_360_L="<L"+str(int(NUM_TOTALES))+">"
+
+
+print(PASO_R,PASO_L,PASO_180_L,PASO_180_R,PASO_360_L,PASO_360_R)
 
 portList=list_ports.comports()
 print("Listado de puertos:")
@@ -132,7 +143,9 @@ def medicion(i):
 
     db=[]
     reset_position()
+
     send_command("AVER:CLE")
+    time.sleep(delay)
     for x in range(0, NUM_MEDIOGIRO):
         
         time.sleep(delay)
@@ -152,7 +165,7 @@ def medicion(i):
         print("Valor medido",aux2)
         directivity=aux2
         db.append(directivity)
-        serialArduino.write(b'r')
+        serialArduino.write(PASO_R.encode())
         responseSerial=""
         #serialArduino.write(order.encode())
         while(responseSerial!="finish"):
@@ -160,7 +173,9 @@ def medicion(i):
             responseSerial = readedLine.decode().rstrip()
             print(responseSerial)
 
-    serialArduino.write(b'z')
+    reset_position()
+    time.sleep(delay)
+    serialArduino.write(PASO_180_L.encode())
     responseSerial=""
     #serialArduino.write(order.encode())
     while(responseSerial!="finish"):
@@ -168,14 +183,7 @@ def medicion(i):
         responseSerial = readedLine.decode().rstrip()
         print(responseSerial)
     time.sleep(delay)
-    for x in range(0,NUM_MEDIOGIRO):
-        serialArduino.write(b'l')
-        responseSerial=""
-        #serialArduino.write(order.encode())
-        while(responseSerial!="finish"):
-            readedLine=serialArduino.readline()
-            responseSerial = readedLine.decode().rstrip()
-            print(responseSerial)
+    time.sleep(delay)
     
     for x in range(0, NUM_MEDIOGIRO):
         time.sleep(delay)
@@ -195,7 +203,7 @@ def medicion(i):
         print("Valor medido",aux2)
         directivity=aux2
         db.append(directivity)
-        serialArduino.write(b'r')
+        serialArduino.write(PASO_R.encode())
         responseSerial=""
         #serialArduino.write(ormpoder.encode())
         while(responseSerial!="finish"):
@@ -222,14 +230,23 @@ def medicion(i):
 
     num=str(i)
     num=num+".npy"
-    print("\nSaving [db] data to ./medidas/estrutcura1_32_X\n"+num)
+    print("\nSaving [db] data to ../medidas/estrutcura_viernes_128_X\n"+num)
     outfile = TemporaryFile()
-    np.save("./medidas/estrutcura1_32_X"+num,db)
+    np.save("../medidas/estrutcura_viernes_128_X"+num,db)
     _ = outfile.seek(0)
-    print("Saved file:",np.load("./medidas/estrutcura1_32_X"+num))
+    print("Saved file:",np.load("../medidas/estrutcura_viernes_128_X"+num))
     db=np.subtract(db,dbi)
+    return db
 
-for i in range(1,4):
+
+
+
+
+############ MAIN ###################
+
+
+for i in range(1,3):
+    print("Iniciando medicion numero "+str(i))
     medicion(i)
 
 

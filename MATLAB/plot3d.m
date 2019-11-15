@@ -2,10 +2,10 @@
 clc;
 clear;
 %%
-load('testX.mat');
+load('testingX.mat');
 %polx=circshift(y,16);
 polx=y;
-load('testY.mat');
+load('testingY.mat');
 poly=circshift(y,16);
 %poly=y;
 aux=circshift(polx,16);

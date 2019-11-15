@@ -15,9 +15,9 @@ resources = rm.list_resources()
 print(resources)
 # resources es una tupla de los distintos "endpoints"
 
-myInstrument = rm.open_resource(resources[0])
+myInstrument = rm.open_resource(resources[1])
 idnResponse = myInstrument.query('*IDN?')
-print ("Resourcer number: "+str(resources.index(resources[0])),"\n\t|-->VISA resources[0] name: "+str(resources[0]))
+print ("Resourcer number: "+str(resources.index(resources[1])),"\n\t|-->VISA resources[0] name: "+str(resources[0]))
 print("\t|-->Instrument: "+idnResponse)
 
 
